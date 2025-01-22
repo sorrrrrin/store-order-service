@@ -1,0 +1,29 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: order-service
+  profiles:
+    #    active: dev  # Default to dev if no profile is explicitly set
+    active: dev, kafka-enabled  # Default to dev if no profile is explicitly set
+  kafka:
+    consumer:
+      group-id: order-service-group
+    topic: my-topic
+management:
+  endpoints:
+    web:
+      exposure:
+        #include: "*" # Expose all Actuator endpoints (if using Actuator)
+        include: health,info,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  security:
+    enabled: false # Disable Actuator security
+#logging:
+#  level:
+#    org:
+#      apache:
+#        kafka: DEBUG
