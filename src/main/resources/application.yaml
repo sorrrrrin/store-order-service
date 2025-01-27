@@ -22,7 +22,10 @@ management:
         enabled: true
   security:
     enabled: false # Disable Actuator security
-#logging:
+logging:
+  level:
+    root: INFO
+    com.store: DEBUG
 #  level:
 #    org:
 #      apache:

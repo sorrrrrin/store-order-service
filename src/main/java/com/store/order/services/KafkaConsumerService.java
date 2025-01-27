@@ -5,12 +5,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.store.order.commons.Constants;
 import com.store.order.commons.kafka.events.ProductUpdateEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
 @Profile("kafka-enabled")
+@Slf4j
 public class KafkaConsumerService {
 
     @KafkaListener(topics = "${spring.kafka.topic}", groupId = "${spring.kafka.consumer.group-id}")
@@ -22,10 +24,10 @@ public class KafkaConsumerService {
         switch (eventType) {
             case Constants.PRODUCT_UPDATED:
                 ProductUpdateEvent productUpdateEvent = objectMapper.readValue(event, ProductUpdateEvent.class);
-                System.out.println("Product updated: " + productUpdateEvent);
+                log.debug("Product updated: " + productUpdateEvent);
                 break;
             default:
-                System.out.println("Unknown event type: " + eventType);
+                log.debug("Unknown event type: " + eventType);
         }
 
     }

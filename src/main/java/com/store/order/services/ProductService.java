@@ -4,6 +4,7 @@ import com.store.order.dtos.ProductDTO;
 import com.store.order.entities.Product;
 import com.store.order.mappers.ProductMapper;
 import com.store.order.repositories.ProductRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ProductService {
     @Value("${spring.kafka.topic}")
     private String topic;
