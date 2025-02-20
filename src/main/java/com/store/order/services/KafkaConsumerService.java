@@ -18,17 +18,29 @@ public class KafkaConsumerService {
     @KafkaListener(topics = "${spring.kafka.topic}", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(String event) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(event);
-        String eventType = rootNode.get("eventType").asText();
+        try {
+            JsonNode rootNode = objectMapper.readTree(event);
 
-        switch (eventType) {
-            case Constants.PRODUCT_UPDATED:
-                ProductUpdateEvent productUpdateEvent = objectMapper.readValue(event, ProductUpdateEvent.class);
-                log.debug("Product updated: " + productUpdateEvent);
-                break;
-            default:
-                log.debug("Unknown event type: " + eventType);
+            if (!rootNode.has("eventType")) {
+                log.debug("Event unknown for message: {}", event);
+                return;
+            }
+
+            String eventType = rootNode.get("eventType").asText();
+
+            switch (eventType) {
+                case Constants.PRODUCT_UPDATED:
+                    ProductUpdateEvent productUpdateEvent = objectMapper.readValue(event, ProductUpdateEvent.class);
+                    log.debug("Product updated: {}", productUpdateEvent);
+                    break;
+                default:
+                    log.debug("Unknown event type for message: {}", event);
+            }
+        } catch (JsonProcessingException e) {
+            log.error("Error parsing event: {}", event);
+            return;
         }
+
 
     }
 }
