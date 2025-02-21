@@ -2,6 +2,7 @@ package com.store.order.services;
 
 import com.store.order.dtos.ProductDTO;
 import com.store.order.entities.Product;
+import com.store.order.exceptions.ProductNotFoundException;
 import com.store.order.mappers.ProductMapper;
 import com.store.order.repositories.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class ProductService {
     }
 
     public ProductDTO getProductById(String id) {
-        return productMapper.productToProductDto(productRepository.findById(id).orElse(null));
+        return productMapper.productToProductDto(productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found")));
     }
 
     public ProductDTO addProduct(ProductDTO productDTO) {
@@ -42,16 +43,14 @@ public class ProductService {
     }
 
     public ProductDTO updateProduct(String id, ProductDTO productDTO) {
-        Product existingProduct = productRepository.findById(id).orElse(null);
+        Product existingProduct = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
 
-        if (existingProduct != null) {
-            existingProduct.setName(productDTO.getName());
-            existingProduct.setDescription(productDTO.getDescription());
-            existingProduct.setSku(productDTO.getSku());
-            kafkaTemplate.send(topic, productDTO.toString());
-            return productMapper.productToProductDto(productRepository.save(existingProduct));
-        }
-        return null;
+        existingProduct.setName(productDTO.getName());
+        existingProduct.setDescription(productDTO.getDescription());
+        existingProduct.setSku(productDTO.getSku());
+        kafkaTemplate.send(topic, productDTO.toString());
+
+        return productMapper.productToProductDto(productRepository.save(existingProduct));
     }
 
     public void deleteProduct(ProductDTO productDTO) {

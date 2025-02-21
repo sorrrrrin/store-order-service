@@ -18,4 +18,5 @@ public class Product {
     private String name;
     private String description;
     private String sku;
+    private double price;
 }
