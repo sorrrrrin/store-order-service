@@ -1,6 +1,6 @@
 package com.store.order.services;
 
-import com.store.order.dtos.ProductDTO;
+import com.store.order.dtos.ProductDto;
 import com.store.order.entities.Product;
 import com.store.order.exceptions.ProductNotFoundException;
 import com.store.order.mappers.ProductMapper;
@@ -30,32 +30,35 @@ public class ProductService {
     private KafkaTemplate<String, String> kafkaTemplate;
 
 
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         return productRepository.findAll().stream().map(productMapper::productToProductDto).collect(Collectors.toList());
     }
 
-    public ProductDTO getProductById(String id) {
+    public ProductDto getProductById(String id) {
         return productMapper.productToProductDto(productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found")));
     }
 
-    public ProductDTO addProduct(ProductDTO productDTO) {
-        return productMapper.productToProductDto(productRepository.save(productMapper.productDtoToProduct(productDTO)));
+    public ProductDto addProduct(ProductDto productDto) {
+        return productMapper.productToProductDto(productRepository.save(productMapper.productDtoToProduct(productDto)));
     }
 
-    public ProductDTO updateProduct(String id, ProductDTO productDTO) {
+    public ProductDto updateProduct(String id, ProductDto productDto) {
         Product existingProduct = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
 
-        existingProduct.setName(productDTO.getName());
-        existingProduct.setDescription(productDTO.getDescription());
-        existingProduct.setSku(productDTO.getSku());
-        kafkaTemplate.send(topic, productDTO.toString());
+        existingProduct.setName(productDto.getName());
+        existingProduct.setDescription(productDto.getDescription());
+        existingProduct.setSku(productDto.getSku());
+        kafkaTemplate.send(topic, productDto.toString());
 
         return productMapper.productToProductDto(productRepository.save(existingProduct));
     }
 
-    public void deleteProduct(ProductDTO productDTO) {
-        productRepository.delete(productMapper.productDtoToProduct(productDTO));
+    public void deleteProduct(ProductDto productDto) {
+        productRepository.delete(productMapper.productDtoToProduct(productDto));
     }
 
+    public void deleteAllProducts() {
+        productRepository.deleteAll();
+    }
 
 }
