@@ -17,6 +17,8 @@ public class SecurityConfig {
                 // Permit all HTTP requests
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll());
+                ///swagger-ui/**
+                ///v3/api-docs/**
         return http.build();
     }
 }
