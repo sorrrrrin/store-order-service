@@ -1,24 +1,16 @@
-package com.store.order.entities;
+package com.store.order.dtos;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-@Entity
-@Table(name = "customers")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class CustomerDto {
     private String id;
-
     private String name;
     private String email;
     private String phone;
@@ -29,7 +21,4 @@ public class Customer {
     private String country;
     private String creditCard;
     private String creditCardType;
-
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
 }

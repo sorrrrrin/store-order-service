@@ -21,7 +21,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
 
     private LocalDateTime createdAt;

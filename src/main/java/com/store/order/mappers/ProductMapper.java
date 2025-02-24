@@ -1,13 +1,14 @@
 package com.store.order.mappers;
 
-import com.store.order.dtos.ProductDTO;
-import com.store.order.entities.Product;
+import com.store.order.dtos.*;
+import com.store.order.entities.*;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
-    ProductDTO productToProductDto(Product product);
+    ProductDto productToProductDto(Product product);
 
-    Product productDtoToProduct(ProductDTO productDto);
+    Product productDtoToProduct(ProductDto productDto);
+
 }
