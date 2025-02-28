@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/kafka")
+@RequestMapping("/api/kafka")
 public class KafkaProducerController {
     @Value("${spring.kafka.topic}")
     private String topic;
