@@ -5,6 +5,7 @@ import com.store.order.entities.Customer;
 import com.store.order.exceptions.CustomerNotFoundException;
 import com.store.order.mappers.OrderMapper;
 import com.store.order.repositories.CustomerRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 @Slf4j
 public class CustomerService {
     @Value("${spring.kafka.topic}")
