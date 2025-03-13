@@ -52,7 +52,7 @@ public class OrderServiceTest {
 
     @BeforeEach
     void setUp() {
-        orderService = new OrderService(TestConstants.TEST_KAFKA_TOPIC, orderMapper, orderRepository, productRepository, customerRepository, kafkaTemplate);
+        orderService = new OrderService(orderMapper, orderRepository, productRepository, customerRepository, kafkaTemplate);
     }
 
     @Test

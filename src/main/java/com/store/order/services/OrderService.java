@@ -23,26 +23,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 @Slf4j
 public class OrderService {
     @Value("${spring.kafka.topic}")
     private String topic;
 
-    @Autowired
-    private OrderMapper orderMapper;
+    private final OrderMapper orderMapper;
+
+    private final OrderRepository orderRepository;
+
+    private final ProductRepository productRepository;
+
+    private final CustomerRepository customerRepository;
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    public OrderService(OrderMapper orderMapper, OrderRepository orderRepository, ProductRepository productRepository, CustomerRepository customerRepository, KafkaTemplate<String, String> kafkaTemplate) {
+        this.orderMapper = orderMapper;
+        this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
+        this.customerRepository = customerRepository;
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
 
     public List<OrderDto> getAllOrders() {

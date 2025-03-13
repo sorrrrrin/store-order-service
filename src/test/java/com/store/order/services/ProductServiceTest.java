@@ -36,7 +36,7 @@ public class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(TestConstants.TEST_KAFKA_TOPIC, productMapper, productRepository, kafkaTemplate);
+        productService = new ProductService(productMapper, productRepository, kafkaTemplate);
     }
 
     @Test
