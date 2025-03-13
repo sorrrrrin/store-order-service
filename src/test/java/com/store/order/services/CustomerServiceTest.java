@@ -36,7 +36,7 @@ public class CustomerServiceTest {
 
     @BeforeEach
     void setUp() {
-        customerService = new CustomerService(TestConstants.TEST_KAFKA_TOPIC, orderMapper, customerRepository, kafkaTemplate);
+        customerService = new CustomerService(orderMapper, customerRepository, kafkaTemplate);
     }
 
     @Test

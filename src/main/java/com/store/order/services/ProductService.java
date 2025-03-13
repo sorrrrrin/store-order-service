@@ -16,20 +16,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 @Slf4j
 public class ProductService {
     @Value("${spring.kafka.topic}")
     private String topic;
 
-    @Autowired
-    private ProductMapper productMapper;
+    private final ProductMapper productMapper;
+
+    private final ProductRepository productRepository;
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    public ProductService(ProductMapper productMapper, ProductRepository productRepository, KafkaTemplate<String, String> kafkaTemplate) {
+        this.productMapper = productMapper;
+        this.productRepository = productRepository;
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
 
     public List<ProductDto> getAllProducts() {

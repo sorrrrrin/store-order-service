@@ -15,8 +15,12 @@ import org.springframework.stereotype.Service;
 @Profile("kafka-enabled")
 @Slf4j
 public class KafkaConsumerService {
+    private final ObjectMapper objectMapper;
+
     @Autowired
-    private ObjectMapper objectMapper;
+    public KafkaConsumerService(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @KafkaListener(topics = "${spring.kafka.topic}", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(String event) throws JsonProcessingException {
