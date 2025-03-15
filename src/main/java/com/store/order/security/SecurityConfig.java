@@ -1,20 +1,30 @@
-package com.store.order.config;
+package com.store.order.security;
 
-import com.store.order.security.JwtAuthenticationFilter;
 import com.store.order.utils.Constants;
 import com.store.order.utils.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
+
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomAccessDeniedHandler customAccessDeniedHandler) {
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -26,10 +36,17 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority(Constants.ROLE_ADMIN)
-                        .requestMatchers("/user/**").hasAnyAuthority(Constants.ROLE_CUSTOMER, Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET,"/api/order/products", "/api/order/customers/**").hasAnyAuthority(Constants.ROLE_CUSTOMER, Constants.ROLE_ADMIN)
+                        .requestMatchers("/api/order/products", "/api/order/orders").hasAuthority(Constants.ROLE_ADMIN)
+                        .requestMatchers("/api/order/customers").hasAuthority(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.DELETE,"/api/order/orders").hasAuthority(Constants.ROLE_ADMIN)
+                        .requestMatchers("/api/auth/login", "/public/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/**").hasAnyAuthority(Constants.ROLE_CUSTOMER, Constants.ROLE_ADMIN)
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil()), UsernamePasswordAuthenticationFilter.class);
