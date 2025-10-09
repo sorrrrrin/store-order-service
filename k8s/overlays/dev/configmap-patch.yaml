@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-service-config
+  labels:
+    app: order-service
+data:
+  EXAMPLE_KEY: "dev-value"
+  # Add or override other keys as needed for dev
+
+
