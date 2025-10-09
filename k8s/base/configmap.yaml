@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-service-config
+  labels:
+    app: order-service
+data:
+  # Add your non-sensitive config here
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql.backend:5432/order
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+  SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  SPRING_JPA_SHOW_SQL: "true"
+  SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: my-cluster-kafka-bootstrap.kafka:9092
+  SPRING_SECURITY_ENABLED: "false"
+  SECURITY_IGNORED: "/**"
+  SECURITY_BASIC_ENABLED: "false"
+  SECURITY_USER_NAME: user
