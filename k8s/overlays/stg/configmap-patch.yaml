@@ -5,5 +5,9 @@ metadata:
   labels:
     app: order-service
 data:
-  # Add or override stg-specific config here
+  EXAMPLE_KEY: "dev-value"
+  # Add or override other keys as needed for dev
+
+
+
 
