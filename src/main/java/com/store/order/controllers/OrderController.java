@@ -94,4 +94,16 @@ public class OrderController {
         OrderDto orderDto = orderService.getOrderById(id);
         return ResponseEntity.ok(orderDto);
     }
+
+    @Operation(summary = "Get orders by customer id", description = "Retrieve orders for a specific customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Orders retrieved successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = OrderDto.class)))
+    })
+    @GetMapping("/orders/customer/{customerId}")
+    public ResponseEntity<List<OrderDto>> getOrdersByCustomerId(@PathVariable String customerId) {
+        List<OrderDto> orders = orderService.getOrdersByCustomerId(customerId);
+        return ResponseEntity.ok(orders);
+    }
 }
