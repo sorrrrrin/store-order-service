@@ -80,4 +80,15 @@ public class CustomerController {
         CustomerDto customerDto = customerService.getCustomerById(id);
         return ResponseEntity.ok(customerDto);
     }
+
+    @Operation(summary = "Get customer by email", description = "Retrieve a specific customer by its email")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Customer found"),
+            @ApiResponse(responseCode = "404", description = "Customer not found")
+    })
+    @GetMapping("/customers/email/{email}")
+    public ResponseEntity<CustomerDto> getCustomerByEmail(@PathVariable String email) {
+        CustomerDto customerDto = customerService.getCustomerByEmail(email);
+        return ResponseEntity.ok(customerDto);
+    }
 }

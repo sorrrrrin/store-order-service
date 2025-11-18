@@ -5,7 +5,6 @@ import com.store.order.entities.Customer;
 import com.store.order.exceptions.CustomerNotFoundException;
 import com.store.order.mappers.OrderMapper;
 import com.store.order.repositories.CustomerRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +39,10 @@ public class CustomerService {
 
     public CustomerDto getCustomerById(String id) {
         return orderMapper.customerToCustomerDto(customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found")));
+    }
+
+    public CustomerDto getCustomerByEmail(String email) {
+        return orderMapper.customerToCustomerDto(customerRepository.findByEmail(email).orElseThrow(() -> new CustomerNotFoundException("Customer with email " + email + " not found")));
     }
 
     public CustomerDto addCustomer(CustomerDto customerDto) {

@@ -122,4 +122,26 @@ public class CustomerServiceTest {
 
         verify(customerRepository, times(1)).deleteAll();
     }
+
+    @Test
+    void getCustomerByEmailTest() {
+        Customer customer = TestUtils.getCustomer();
+
+        when(customerRepository.findByEmail(TestConstants.CUSTOMER_EMAIL)).thenReturn(Optional.of(customer));
+
+        CustomerDto customerDto = customerService.getCustomerByEmail(TestConstants.CUSTOMER_EMAIL);
+
+        assertNotNull(customerDto);
+        assertEquals(TestConstants.CUSTOMER_ID, customerDto.getId());
+        verify(customerRepository, times(1)).findByEmail(TestConstants.CUSTOMER_EMAIL);
+    }
+
+    @Test
+    void getCustomerByEmailThrowsExceptionTest() {
+        when(customerRepository.findByEmail(TestConstants.CUSTOMER_EMAIL)).thenReturn(Optional.empty());
+
+        assertThrows(CustomerNotFoundException.class, () -> customerService.getCustomerByEmail(TestConstants.CUSTOMER_EMAIL));
+
+        verify(customerRepository, times(1)).findByEmail(TestConstants.CUSTOMER_EMAIL);
+    }
 }
