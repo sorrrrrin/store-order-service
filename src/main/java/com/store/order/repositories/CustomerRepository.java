@@ -3,4 +3,8 @@ package com.store.order.repositories;
 import com.store.order.entities.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CustomerRepository extends JpaRepository<Customer, String> { }
+import java.util.Optional;
+
+public interface CustomerRepository extends JpaRepository<Customer, String> {
+    Optional<Customer> findByEmail(String email);
+}
