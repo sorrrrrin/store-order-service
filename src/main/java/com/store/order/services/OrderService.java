@@ -11,7 +11,6 @@ import com.store.order.mappers.OrderMapper;
 import com.store.order.repositories.CustomerRepository;
 import com.store.order.repositories.OrderRepository;
 import com.store.order.repositories.ProductRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +53,11 @@ public class OrderService {
 
     public OrderDto getOrderById(String id) {
         return orderMapper.orderToOrderDto(orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order with id " + id + " not found")));
+    }
+
+    public List<OrderDto> getOrdersByCustomerId(String customerId) {
+        List<Order> orders = orderRepository.findOrdersByCustomerId(customerId);
+        return orders.stream().map(orderMapper::orderToOrderDto).collect(Collectors.toList());
     }
 
     public OrderDto addOrder(OrderDto orderDto) {

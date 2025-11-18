@@ -194,4 +194,19 @@ public class OrderServiceTest {
         verify(orderRepository, never()).save(any(Order.class));
     }
 
+    @Test
+    void getOrdersByCustomerIdTest() {
+        Order order = TestUtils.getOrder();
+        String customerId = order.getCustomer().getId();
+
+        when(orderRepository.findOrdersByCustomerId(customerId)).thenReturn(List.of(order));
+
+        List<OrderDto> orders = orderService.getOrdersByCustomerId(customerId);
+
+        assertNotNull(orders);
+        assertEquals(1, orders.size());
+        assertEquals(TestConstants.ORDER_ID, orders.get(0).getId());
+        verify(orderRepository, times(1)).findOrdersByCustomerId(customerId);
+    }
+
 }
