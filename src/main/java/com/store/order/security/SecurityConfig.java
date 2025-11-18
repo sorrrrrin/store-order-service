@@ -41,10 +41,10 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET,"/api/order/products", "/api/order/customers/**").hasAnyAuthority(Constants.ROLE_CUSTOMER, Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/order/orders/customer/**", "/api/order/customers/email/**").hasAnyAuthority(Constants.ROLE_CUSTOMER, Constants.ROLE_ADMIN)
                         .requestMatchers("/api/order/products", "/api/order/orders").hasAuthority(Constants.ROLE_ADMIN)
                         .requestMatchers("/api/order/customers").hasAuthority(Constants.ROLE_ADMIN)
-                        .requestMatchers(HttpMethod.DELETE,"/api/order/orders").hasAuthority(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, "/api/order/orders").hasAuthority(Constants.ROLE_ADMIN)
                         .requestMatchers("/api/auth/login", "/public/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/**").hasAnyAuthority(Constants.ROLE_CUSTOMER, Constants.ROLE_ADMIN)
                         .anyRequest().authenticated()
@@ -82,5 +82,3 @@ public class SecurityConfig {
         return source;
     }
 }
-
-
